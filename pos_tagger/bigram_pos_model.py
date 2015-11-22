@@ -2,14 +2,27 @@ from pos_tagger.hidden_markov_model import HiddenMarkovModel
 
 
 class BigramPosModel(HiddenMarkovModel):
+    """
+    Bigram Part of Speech model using a Hidden Markov Model over tagged training data
+    """
 
     def __init__(self, corpus):
+        """
+        :param corpus: tagged corpus of sentences of form list of sentences, where each sentence is a list of tuples of
+        form (word, pos)
+        """
         self.corpus = corpus
         super().__init__(self.calculate_bigram_pos_frequencies(),
                          self.calculate_pos_word_frequencies(),
-                         self.calculate_state_frequencies())
+                         self.calculate_pos_frequencies())
 
     def calculate_bigram_pos_frequencies(self):
+        """
+        Calculates the frequencies of bigrams of pos tags in the training data, including the <START> tag at the
+        beginning of each sentence
+        :return: map of maps, where outside map is prior pos, inside map is current pos, and value is bigram count of
+        prior pos, current pos
+        """
         pos = dict()
         pos[self.START] = {}
         for sentence in self.corpus.tagged_sentences:
@@ -28,6 +41,11 @@ class BigramPosModel(HiddenMarkovModel):
         return pos
 
     def calculate_pos_word_frequencies(self):
+        """
+        Calculates the frequencies of words for each pos
+        :return: map of maps, where outside map is pos, inside map is words, and value is count of the given words for
+        the given pos
+        """
         pos_words = dict()
         for sentence in self.corpus.tagged_sentences:
             for word, pos in sentence:
@@ -38,7 +56,11 @@ class BigramPosModel(HiddenMarkovModel):
                 pos_words[pos][word] += 1
         return pos_words
 
-    def calculate_state_frequencies(self):
+    def calculate_pos_frequencies(self):
+        """
+        Calculates the frequencies of pos in the corpus, including one <START> for each sentence
+        :return: map of pos to the number of occurrences in the corpus
+        """
         states = dict()
         states[self.START] = 0
         for sentence in self.corpus.tagged_sentences:
