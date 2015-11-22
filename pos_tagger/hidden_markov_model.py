@@ -27,7 +27,7 @@ class HiddenMarkovModel:
         """
         matrix = [{}]
         for state in self.states:
-            probability_state_given_previous = self.get_bigram_probability(state, self.START)
+            probability_state_given_previous = self.get_bigram_probability(self.START, state)
             probability_word_given_state = self.get_observed_probability(state, observations[0])
             probability = probability_state_given_previous * probability_word_given_state
             backpointer = None
@@ -60,7 +60,7 @@ class HiddenMarkovModel:
         states.reverse()
         return states
 
-    def get_bigram_probability(self, state, prior):
+    def get_bigram_probability(self, prior, state):
         """
         Gets the probability of a state given a prior state
         :param state: the current state
