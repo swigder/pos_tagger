@@ -36,15 +36,13 @@ class HiddenMarkovModel:
             matrix.append({})
             for state in self.states:
                 probability_observation_given_state = self.get_observed_probability(state, observation)
-                best_probability = 0
-                best_backpointer = None
+                best_probability, best_backpointer = 0, None
                 for previous_state in self.states:
                     probability_previous, _ = matrix[i-1][previous_state]
                     probability_current_given_previous = self.get_bigram_probability(previous_state, state)
                     current_probability = probability_previous * probability_current_given_previous
                     if current_probability > best_probability:
-                        best_probability = current_probability
-                        best_backpointer = previous_state
+                        best_probability, best_backpointer = current_probability, previous_state
                 probability = best_probability * probability_observation_given_state
                 matrix[i][state] = (probability, best_backpointer)
         best_probability = 0
