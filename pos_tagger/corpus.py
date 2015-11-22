@@ -6,11 +6,13 @@ class Corpus:
     Corpus wrapper that normalizes a pos-tagged corpus by setting all words to lowercase
     """
 
-    def __init__(self, tagged_words):
+    def __init__(self, tagged_sentences):
         """
-        :param tagged_words: list of tuples, where each tuple is of form (word, pos_tag)
+        :param tagged_sentences: list of lists of tuples, where each list is a sentence and each tuple is a token in the
+        sentence of form (word, pos_tag)
         """
-        self.tagged_words = [(word_pos[0].lower(), word_pos) for word_pos in tagged_words]
+        self.tagged_sentences = [[(word_pos[0].lower(), word_pos[1]) for word_pos in sentence]
+                                 for sentence in tagged_sentences]
 
 
 class BrownCorpus(Corpus):
@@ -19,7 +21,7 @@ class BrownCorpus(Corpus):
     """
 
     def __init__(self):
-        super().__init__(brown.tagged_words(tagset='universal'))
+        super().__init__(brown.tagged_sents(tagset='universal'))
 
 
 class TrainingBrownCorpus(BrownCorpus):
@@ -30,7 +32,7 @@ class TrainingBrownCorpus(BrownCorpus):
 
     def __init__(self):
         super().__init__()
-        self.tagged_words = self.tagged_words[:int(len(self.tagged_words) * .9)]
+        self.tagged_sentences = self.tagged_sentences[:int(len(self.tagged_sentences) * .9)]
 
 
 class TestBrownCorpus(BrownCorpus):
@@ -41,4 +43,4 @@ class TestBrownCorpus(BrownCorpus):
 
     def __init__(self):
         super().__init__()
-        self.tagged_words = self.tagged_words[int(len(self.tagged_words) * .9):]
+        self.tagged_sentences = self.tagged_sentences[int(len(self.tagged_sentences) * .9):]
