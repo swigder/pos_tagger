@@ -14,7 +14,8 @@ class BigramPosModel(HiddenMarkovModel):
         self.corpus = corpus
         super().__init__(self.calculate_bigram_pos_frequencies(),
                          self.calculate_pos_word_frequencies(),
-                         self.calculate_pos_frequencies())
+                         self.calculate_pos_frequencies(),
+                         self.corpus.words)
 
     def calculate_bigram_pos_frequencies(self):
         """

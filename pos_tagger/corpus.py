@@ -13,6 +13,7 @@ class Corpus:
         """
         self.tagged_sentences = [[(word_pos[0].lower(), word_pos[1]) for word_pos in sentence]
                                  for sentence in tagged_sentences]
+        self.words = [word_pos[0] for sentence in tagged_sentences for word_pos in sentence]
 
 
 class BrownCorpus(Corpus):
@@ -32,7 +33,19 @@ class TrainingBrownCorpus(BrownCorpus):
 
     def __init__(self):
         super().__init__()
-        self.tagged_sentences = self.tagged_sentences[:int(len(self.tagged_sentences) * .9)]
+        self.tagged_sentences = self.tagged_sentences[:int(len(self.tagged_sentences) * .8)]
+
+
+class TuningBrownCorpus(BrownCorpus):
+    """
+    Wrapper over a subset of the Brown Corpus to be used for testing (use in conjunction with TrainingBrownCorpus in
+    this file)
+    """
+
+    def __init__(self):
+        super().__init__()
+        sentences = len(self.tagged_sentences)
+        self.tagged_sentences = self.tagged_sentences[int(sentences * .8):int(sentences * .9)]
 
 
 class TestBrownCorpus(BrownCorpus):

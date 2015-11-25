@@ -5,7 +5,7 @@ class HiddenMarkovModel:
 
     START = "<START>"
     
-    def __init__(self, hidden_bigram_frequencies, observation_frequencies, state_counts):
+    def __init__(self, hidden_bigram_frequencies, observation_frequencies, state_counts, observations):
         """
         :param hidden_bigram_frequencies: map of maps, where outside map is prior state, inside map is current state,
         and value is bigram count of prior state, current state
@@ -18,6 +18,7 @@ class HiddenMarkovModel:
         self.observation_frequencies = observation_frequencies
         self.state_counts = state_counts
         self.states = [state for state in state_counts.keys() if state != self.START]
+        self.observations = observations
 
     def decode(self, observations):
         """
@@ -45,6 +46,8 @@ class HiddenMarkovModel:
                         best_probability, best_backpointer = current_probability, previous_state
                 probability = best_probability * probability_observation_given_state
                 matrix[i][state] = (probability, best_backpointer)
+
+        # reconstruct the best path
         best_probability = 0
         backpointer = None
         for state in self.states:
@@ -52,6 +55,9 @@ class HiddenMarkovModel:
             if probability > best_probability:
                 best_probability = probability
                 backpointer = state
+        if best_probability == 0:
+            print("No possible result found for observations", observations)
+            return []
         states = []
         for i in range(len(observations), 0, -1):
             states.append(backpointer)
@@ -72,10 +78,15 @@ class HiddenMarkovModel:
 
     def get_observed_probability(self, state, observation):
         """
-        Gets the probability of an observation given a state
+        Gets the probability of an observation given a state.  This is not a true probability, as observations that are
+        not part of the list of observations will be given a weight of one, to facilitate the HMM considering only
+        hidden states in case of an unknown observation
         :param state: the current state of the model
         :param observation: the observation
-        :return: probability of the observation given the state, defined as count(observation, state) / count(state)
+        :return: probability of the observation given the state, defined as count(observation, state) / count(state), or
+        1 if the observation does not exist in the list of possible observations
         """
+        if observation not in self.observations:
+            return 1
         observations = self.observation_frequencies[state]
         return observations[observation] / self.state_counts[state] if observation in observations else 0
