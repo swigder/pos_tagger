@@ -57,7 +57,7 @@ class HiddenMarkovModel:
                 backpointer = state
         if best_probability == 0:
             print("No possible result found for observations", observations)
-            return []
+            return ['<UNK>'] * len(observations)
         states = []
         for i in range(len(observations), 0, -1):
             states.append(backpointer)
