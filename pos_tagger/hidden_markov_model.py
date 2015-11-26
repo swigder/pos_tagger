@@ -32,26 +32,28 @@ class HiddenMarkovModel:
             probability_word_given_state = self.get_observed_probability(state, observations[0])
             probability = probability_state_given_previous * probability_word_given_state
             backpointer = None
-            matrix[0][state] = (probability, backpointer)
+            if probability > 0:
+                matrix[0][state] = (probability, backpointer)
         for i, observation in enumerate(observations[1:], 1):
             matrix.append({})
             for state in self.states:
                 probability_observation_given_state = self.get_observed_probability(state, observation)
                 best_probability, best_backpointer = 0, None
-                for previous_state in self.states:
-                    probability_previous, _ = matrix[i-1][previous_state]
+                for previous_state, previous_value in matrix[i-1].items():
+                    probability_previous, _ = previous_value
                     probability_current_given_previous = self.get_bigram_probability(previous_state, state)
                     current_probability = probability_previous * probability_current_given_previous
                     if current_probability > best_probability:
                         best_probability, best_backpointer = current_probability, previous_state
                 probability = best_probability * probability_observation_given_state
-                matrix[i][state] = (probability, best_backpointer)
+                if probability > 0:
+                    matrix[i][state] = (probability, best_backpointer)
 
         # reconstruct the best path
         best_probability = 0
         backpointer = None
-        for state in self.states:
-            probability, _ = matrix[-1][state]
+        for state, value in matrix[-1].items():
+            probability, _ = value
             if probability > best_probability:
                 best_probability = probability
                 backpointer = state

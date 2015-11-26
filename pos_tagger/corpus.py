@@ -21,8 +21,9 @@ class BrownCorpus(Corpus):
     Wrapper over the Brown Corpus using universal tagset that keeps all data in memory for performance improvements
     """
 
-    def __init__(self):
-        super().__init__(brown.tagged_sents(tagset='universal'))
+    def __init__(self, start=0.0, end=1.0):
+        sentences = brown.tagged_sents(tagset='universal')
+        super().__init__(sentences[int(len(sentences)*start):int(len(sentences)*end)])
 
 
 class TrainingBrownCorpus(BrownCorpus):
@@ -32,8 +33,7 @@ class TrainingBrownCorpus(BrownCorpus):
     """
 
     def __init__(self):
-        super().__init__()
-        self.tagged_sentences = self.tagged_sentences[:int(len(self.tagged_sentences) * .8)]
+        super().__init__(0, .8)
 
 
 class TuningBrownCorpus(BrownCorpus):
@@ -43,9 +43,7 @@ class TuningBrownCorpus(BrownCorpus):
     """
 
     def __init__(self):
-        super().__init__()
-        sentences = len(self.tagged_sentences)
-        self.tagged_sentences = self.tagged_sentences[int(sentences * .8):int(sentences * .9)]
+        super().__init__(.8, .9)
 
 
 class TestBrownCorpus(BrownCorpus):
@@ -55,5 +53,4 @@ class TestBrownCorpus(BrownCorpus):
     """
 
     def __init__(self):
-        super().__init__()
-        self.tagged_sentences = self.tagged_sentences[int(len(self.tagged_sentences) * .9):]
+        super().__init__(.9, 1)
