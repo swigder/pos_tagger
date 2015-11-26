@@ -38,6 +38,8 @@ class HiddenMarkovModel:
             matrix.append({})
             for state in self.states:
                 probability_observation_given_state = self.get_observed_probability(state, observation)
+                if probability_observation_given_state == 0:
+                    continue
                 best_probability, best_backpointer = 0, None
                 for previous_state, previous_value in matrix[i-1].items():
                     probability_previous, _ = previous_value
