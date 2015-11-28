@@ -1,3 +1,4 @@
+from confusion_matrix.confusion_matrix import ConfusionMatrix
 from pos_tagger.bigram_pos_model import BigramPosModel
 from pos_tagger.corpus import BrownCorpus, TrainingBrownCorpus, TuningBrownCorpus, TestBrownCorpus
 from pos_tagger.most_frequent_tag_pos_model import MostFrequentTagPosModel
@@ -40,6 +41,11 @@ def q6_error_rate_most_frequent_tag():
 
 def q7_confusion_matrix():
     training = TrainingBrownCorpus()
-    model = MostFrequentTagPosModel(training)
+    model = BigramPosModel(training)
     test = TestBrownCorpus()
-    # todo actually do something
+    confusion_matrix = ConfusionMatrix(lambda x: model.decode(x), model.states)
+    matrix = confusion_matrix.build([zip(*sentence) for sentence in test.tagged_sentences])
+    print(confusion_matrix.format(matrix))
+
+if __name__ == '__main__':
+    q7_confusion_matrix()
