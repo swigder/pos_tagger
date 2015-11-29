@@ -1,4 +1,4 @@
-from confusion_matrix.model_tester import ModelTester
+from model_tester.model_tester import ModelTester
 from pos_tagger.bigram_pos_model import BigramPosModel
 from pos_tagger.corpus import BrownCorpus, TrainingBrownCorpus, TuningBrownCorpus, TestBrownCorpus
 from pos_tagger.most_frequent_tag_pos_model import MostFrequentTagPosModel

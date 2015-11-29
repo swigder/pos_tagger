@@ -1,4 +1,4 @@
-from confusion_matrix.model_tester import ModelTester
+from model_tester.model_tester import ModelTester
 
 
 class TestModelTester:
