@@ -1,11 +1,24 @@
 class ModelTester:
+    """
+    Tester to evaluate models using test data and report on error rates, generate confusion matrix, etc.
+    """
+
     def __init__(self, function, possible_results, test_data):
+        """
+        :param function: function to run on test data (e.g., lambda that calls model)
+        :param possible_results: list of possible results (for confusion matrix)
+        :param test_data: test data of form tuple (model_input, correct_output).  Input can be any format; if output is
+        a list, each element of output will be evaluated separately for calculating error rates and confusion matrix.
+        """
         self.function = function
         self.possible_results = possible_results
         self.test_data = test_data
         self._build()
 
     def _build(self):
+        """
+        Runs the given function on all test data and records results
+        """
         self.results = dict()
         for input, correct_value in self.test_data:
             model_value = self.function(input)
@@ -16,6 +29,11 @@ class ModelTester:
                 self._record(correct_value, model_value)
 
     def _record(self, correct, model):
+        """
+        Records results for a given run of a model
+        :param correct: correct result
+        :param model: result provided by model
+        """
         if correct not in self.results:
             self.results[correct] = dict()
         if model not in self.results[correct]:
@@ -23,6 +41,10 @@ class ModelTester:
         self.results[correct][model] += 1
 
     def format_confusion_table(self):
+        """
+        Generates a formatted confusion table (for unformatted data, get model.results)
+        :return: string which when printed will be a confusion matrix table
+        """
         table = ' ' * 5
         for possible_result in self.possible_results:  # table header
             table += '{0:5}'.format(possible_result)
@@ -40,6 +62,12 @@ class ModelTester:
         return table
 
     def get_error_rate(self):
+        """
+        Calculates the error rate for the model over the given test data.  If the model returns a list, each item in the
+        list will be considered separately for the error rate calculation (for example, if the model returns a list of
+        ten items, and ten runs each have one error in the list, the error rate will be 10%, not 100%).
+        :return: Error rate in decimal format (e.g., 10% = .1)
+        """
         total = 0
         error = 0
         for correct_value, model_values in self.results.items():
