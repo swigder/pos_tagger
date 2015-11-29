@@ -46,16 +46,17 @@ class Homework:
         """
         Run your algorithm on the test set and report its error rate.
         """
-        self.test_data = [zip(*sentence) for sentence in self.test.tagged_sentences]
-        self.model_tester = ModelTester(lambda x: self.model.decode(x), self.model.states, self.test_data)
+        test_data = [zip(*sentence) for sentence in self.test.tagged_sentences]
+        self.model_tester = ModelTester(lambda x: self.model.decode(x), self.model.states, test_data)
         print("Q5:  Error rate on model for test set:", self.model_tester.get_error_rate())
 
     def q6_error_rate_most_frequent_tag(self):
         """
         Compare this error rate to the 'most frequent tag' baseline.
         """
+        test_data = [zip(*sentence) for sentence in self.test.tagged_sentences]
         model = MostFrequentTagPosModel(self.training)
-        model_tester = ModelTester(lambda x: model.decode(x), self.model.states, self.test_data)
+        model_tester = ModelTester(lambda x: model.decode(x), self.model.states, test_data)
         print("Q6:  Error rate on most-frequent-tag model for test set:", model_tester.get_error_rate())
 
     def q7_confusion_matrix(self):

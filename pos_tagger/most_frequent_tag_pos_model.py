@@ -35,4 +35,4 @@ class MostFrequentTagPosModel:
         :param observations: list of words
         :return: the most common tag in the training data for each word in the input
         """
-        return map(lambda x: self.most_common_pos[x] if x in self.most_common_pos else '<UNK>', observations)
+        return [self.most_common_pos[word] if word in self.most_common_pos else '<UNK>' for word in observations]
