@@ -24,3 +24,9 @@ To use a tagger, create a `BigramPosModel` and provide a tagged corpus, and then
 ## Files in project
 * [postag.py](postag.py) -- Command line interface for POS tagger.  See usage for details on running this.
 * [homework.py](homework.py) -- Responses for all homework questions.  Run command:  `python3 homework.py`.
+* [model_tester/model_tester.py](model_tester/model_tester.py) -- Functionality for evaluating a model with test data and reporting on error rates, generating confusion matrix, etc.
+* [pos_tagger/corpus.py](pos_tagger/corpus.py) -- Normalizing corpus class, with subsets for entire, training, tuning, and test Brown corpora.
+* [pos_tagger/hidden_markov_model.py](pos_tagger/hidden_markov_model.py) -- Hidden Markov Model that implements decode using Viterbi.
+* [pos_tagger/bigram_pos_model.py](pos_tagger/bigram_pos_model.py) -- Part-of-speech tagging model using HMM over training data observation token and hidden POS tag bigrams.
+* [pos_tagger/most_frequent_tag_pos_model.py](pos_tagger/most_frequent_tag_pos_model.py) -- Part-of-speech tagging model using most frequent tag for each word in training data.
+* \*/test/test_\*.py -- Tests for the above classes.
