@@ -1,3 +1,6 @@
+from utilities.utilities import binary_search
+
+
 class HiddenMarkovModel:
     """
     Implementation of a Hidden Markov Model given counts of hidden states and observations as seen in training data
@@ -18,7 +21,7 @@ class HiddenMarkovModel:
         self.observation_frequencies = observation_frequencies
         self.state_counts = state_counts
         self.states = [state for state in state_counts.keys() if state != self.START]
-        self.observations = observations
+        self.observations = sorted(observations)
 
     def decode(self, observations):
         """
@@ -90,7 +93,7 @@ class HiddenMarkovModel:
         :return: probability of the observation given the state, defined as count(observation, state) / count(state), or
         1 if the observation does not exist in the list of possible observations
         """
-        if observation not in self.observations:
+        if binary_search(self.observations, observation) == -1:
             return 1
         observations = self.observation_frequencies[state]
         return observations[observation] / self.state_counts[state] if observation in observations else 0
