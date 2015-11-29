@@ -20,3 +20,7 @@ For more details, run `python postag.py --help`.
 
 ### Using as a library
 To use a tagger, create a `BigramPosModel` and provide a tagged corpus, and then call `decode`. In addition, the general purpose `HiddenMarkovModel` class can be extended or instantiated for use in other models.  For more detail, see class documentation and sample code in tests and in `postag.py` and `homework.py`. 
+
+## Files in project
+* [postag.py](postag.py) -- Command line interface for POS tagger.  See usage for details on running this.
+* [homework.py](homework.py) -- Responses for all homework questions.  Run command:  `python3 homework.py`.
