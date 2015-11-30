@@ -45,20 +45,20 @@ class ModelTester:
         Generates a formatted confusion table (for unformatted data, get model.results)
         :return: string which when printed will be a confusion matrix table
         """
-        table = ' ' * 5
+        table = ' ' * 6
         for possible_result in self.possible_results:  # table header
-            table += '{0:5}'.format(possible_result)
+            table += '{0:6}'.format(possible_result)
         for possible_result_row in self.possible_results:
             table += '\n'
-            table += '{0:5}'.format(possible_result_row)
+            table += '{0:6}'.format(possible_result_row)
             if possible_result_row in self.results:
                 for possible_result_value in self.possible_results:
                     if possible_result_value in self.results[possible_result_row]:
-                        table += '{0:<5}'.format(self.results[possible_result_row][possible_result_value])
+                        table += '{0:<6}'.format(self.results[possible_result_row][possible_result_value])
                     else:
-                        table += '{0:<5}'.format(0)
+                        table += '{0:<6}'.format(0)
             else:
-                table += '{0:<5}'.format(0) * len(self.possible_results)
+                table += '{0:<6}'.format(0) * len(self.possible_results)
         return table
 
     def get_error_rate(self):
