@@ -1,4 +1,5 @@
 from pos_tagger.hidden_markov_model import HiddenMarkovModel
+from pos_tagger.unseen_observation_handler import ConstantUnseenObservationHandler, ClosedClassUnseenObservationHandler
 
 
 class BigramPosModel(HiddenMarkovModel):
@@ -15,7 +16,8 @@ class BigramPosModel(HiddenMarkovModel):
         super().__init__(self.calculate_bigram_pos_frequencies(),
                          self.calculate_pos_word_frequencies(),
                          self.calculate_pos_frequencies(),
-                         self.corpus.words)
+                         self.corpus.words,
+                         ClosedClassUnseenObservationHandler(['.', 'DET', 'CONJ', 'PRON', 'ADP']))
 
     def calculate_bigram_pos_frequencies(self):
         """

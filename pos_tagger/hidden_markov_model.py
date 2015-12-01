@@ -7,8 +7,9 @@ class HiddenMarkovModel:
     """
 
     START = "<START>"
-    
-    def __init__(self, hidden_bigram_frequencies, observation_frequencies, state_counts, observations):
+
+    def __init__(self, hidden_bigram_frequencies, observation_frequencies, state_counts, observations,
+                 unseen_observation_handler):
         """
         :param hidden_bigram_frequencies: map of maps, where outside map is prior state, inside map is current state,
         and value is bigram count of prior state, current state
@@ -16,12 +17,15 @@ class HiddenMarkovModel:
         is count of the given observation in the given state
         :param state_counts: map of states to the number of times that state occurs (for converting counts to
         probabilities)
+        :param unseen_observation_handler handler that will give probabilities for observations that were unseen in the
+        training data
         """
         self.hidden_bigram_frequencies = hidden_bigram_frequencies
         self.observation_frequencies = observation_frequencies
         self.state_counts = state_counts
         self.states = [state for state in state_counts.keys() if state != self.START]
         self.observations = sorted(observations)
+        self.unseen_observation_handler = unseen_observation_handler
 
     def decode(self, observations):
         """
@@ -86,14 +90,14 @@ class HiddenMarkovModel:
     def get_observed_probability(self, state, observation):
         """
         Gets the probability of an observation given a state.  This is not a true probability, as observations that are
-        not part of the list of observations will be given a weight of one, to facilitate the HMM considering only
-        hidden states in case of an unknown observation
+        not part of the list of observations will be given a weight as specified by the unseen_observation_handler
         :param state: the current state of the model
         :param observation: the observation
         :return: probability of the observation given the state, defined as count(observation, state) / count(state), or
-        1 if the observation does not exist in the list of possible observations
+        value provided by the unseen_observation_handler if the observation does not exist in the list of possible
+        observations
         """
         if binary_search(self.observations, observation) == -1:
-            return 1
+            return self.unseen_observation_handler.get_probability(state, observation)
         observations = self.observation_frequencies[state]
         return observations[observation] / self.state_counts[state] if observation in observations else 0

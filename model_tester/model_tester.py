@@ -11,7 +11,7 @@ class ModelTester:
         a list, each element of output will be evaluated separately for calculating error rates and confusion matrix.
         """
         self.function = function
-        self.possible_results = possible_results
+        self.possible_results = sorted(possible_results)
         self.test_data = test_data
         self._build()
 
@@ -46,15 +46,15 @@ class ModelTester:
         :return: string which when printed will be a confusion matrix table
         """
         table = ' ' * 6
-        for possible_result in self.possible_results:  # table header
-            table += '{0:6}'.format(possible_result)
-        for possible_result_row in self.possible_results:
+        for model_result in self.possible_results:  # table header
+            table += '{0:6}'.format(model_result)
+        for correct_result in self.possible_results:
             table += '\n'
-            table += '{0:6}'.format(possible_result_row)
-            if possible_result_row in self.results:
-                for possible_result_value in self.possible_results:
-                    if possible_result_value in self.results[possible_result_row]:
-                        table += '{0:<6}'.format(self.results[possible_result_row][possible_result_value])
+            table += '{0:6}'.format(correct_result)
+            if correct_result in self.results:
+                for model_result in self.possible_results:
+                    if model_result in self.results[correct_result]:
+                        table += '{0:<6}'.format(self.results[correct_result][model_result])
                     else:
                         table += '{0:<6}'.format(0)
             else:
