@@ -28,5 +28,6 @@ To use a tagger, create a `BigramPosModel` and provide a tagged corpus, and then
 * [pos_tagger/corpus.py](pos_tagger/corpus.py) -- Normalizing corpus class, with subsets for entire, training, tuning, and test Brown corpora.
 * [pos_tagger/hidden_markov_model.py](pos_tagger/hidden_markov_model.py) -- Hidden Markov Model that implements decode using Viterbi.
 * [pos_tagger/bigram_pos_model.py](pos_tagger/bigram_pos_model.py) -- Part-of-speech tagging model using HMM over training data observation token and hidden POS tag bigrams.
+* [pos_tagger/unseen_observation_handler.py](pos_tagger/unseen_observation_handler.py) -- Probability providers for unseen observations (used because no smoothing is done). 
 * [pos_tagger/most_frequent_tag_pos_model.py](pos_tagger/most_frequent_tag_pos_model.py) -- Part-of-speech tagging model using most frequent tag for each word in training data.
 * \*/test/test_\*.py -- Tests for the above classes.
